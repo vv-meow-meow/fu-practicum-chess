@@ -51,6 +51,7 @@ class GameField:
             "g": [Knight("white"), Pawn("white"), None, None, None, None, Pawn("black"), Knight("black")],
             "h": [Rook("white"), Pawn("white"), None, None, None, None, Pawn("black"), Rook("black")]
         }
+        return self
 
     def print_field(self):
         # Белые снизу
@@ -69,6 +70,5 @@ class GameField:
 
 if __name__ == '__main__':
     print("Привет! Это игра в шахматы. Белые начинают первыми. Успехов!")
-    g = GameField()
-    g.initialize_field()
+    g = GameField().initialize_field()
     g.print_field()
