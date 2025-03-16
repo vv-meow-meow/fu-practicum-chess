@@ -15,7 +15,10 @@ class Figure(ABC):
         pass
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
-        """Abstract method to get available moves for a figure"""
+        """Abstract method to get available moves for a figure
+
+        It also checks if it can beat another figure
+        """
         pass
 
 
@@ -195,8 +198,27 @@ class Pawn(Figure):
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
         result = []
-        for pos in moves:
-            figure = board.get_figure(pos)
-            if figure is None:
-                result.append(pos)
+        for i in range(len(moves)):
+            move = moves[i]
+            move_col = move[0]
+            move_row = move[1]
+            if i == 0:
+                left_move = f"{chr(ord(move_col) - 1)}{move_row}"
+                right_move = f"{chr(ord(move_col) + 1)}{move_row}"
+
+                figure = board.get_figure(move)
+                if figure is None:
+                    result.append(move)
+
+                for diag_move in (left_move, right_move):
+                    figure = board.get_figure(diag_move)
+                    if figure is None:
+                        continue
+                    elif figure.color != self.color:
+                        result.append(diag_move)
+            if i == 1:
+                figure = board.get_figure(move)
+                if figure is None:
+                    result.append(move)
+
         return result
