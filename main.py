@@ -101,8 +101,8 @@ class MoveHistory:
 
 
 if __name__ == '__main__':
-    game = GameController()
-    game.start_game()
-    # queen = Queen("black")
-    # field = GameField()
-    # print(queen.get_available_moves("d8", field))
+    # game = GameController()
+    # game.start_game()
+    bishop = Bishop("white")
+    field = GameField()
+    print(bishop.get_available_moves("c1", field))
