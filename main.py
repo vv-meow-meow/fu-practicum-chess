@@ -100,9 +100,6 @@ class MoveHistory:
         print("Done!")
 
 
-if __name__ == '__main__':
-    # game = GameController()
-    # game.start_game()
-    bishop = Bishop("white")
-    field = GameField()
-    print(bishop.get_available_moves("c1", field))
+if __name__ == "__main__":
+    game = GameController()
+    game.start_game()
