@@ -24,35 +24,20 @@ class Rook(Figure):
         return "♖" if self.color == "white" else "♜"
 
     def _get_moves(self, pos: str) -> list:
-        result_moves = []
+        moves = []
         col = pos[0]
         row = int(pos[1]) - 1
-        # +1 0 >
-        for i in range(8):
-            new_col = ord(col) + i
-            if new_col > ord('h') or new_col < ord('a'):
-                continue
-            result_moves.append(f"{chr(new_col)}{row + 1}")
-        # -1 0 <
-        for i in range(8):
-            new_col = ord(col) - i
-            if new_col > ord('h') or new_col < ord('a'):
-                continue
-            result_moves.append(f"{chr(new_col)}{row + 1}")
-        # 0 +1 ^
-        for i in range(8):
-            new_row = row + i
-            if new_row > 7 or new_row < 0:
-                continue
-            result_moves.append(f"{col}{new_row + 1}")
-        # 0 -1 ⌄
-        for i in range(8):
-            new_row = row - i
-            if new_row > 7 or new_row < 0:
-                continue
-            result_moves.append(f"{col}{new_row + 1}")
-
-        return result_moves
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        for dcol, drow in directions:
+            i = 0
+            while True:
+                new_col = ord(col) + dcol * i
+                new_row = row + drow * i
+                if new_col < ord('a') or new_col > ord('h') or new_row < 0 or new_row > 7:
+                    break
+                moves.append(f"{chr(new_col)}{new_row + 1}")
+                i += 1
+        return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
@@ -69,10 +54,26 @@ class Knight(Figure):
         return "♘" if self.color == "white" else "♞"
 
     def _get_moves(self, pos: str) -> list:
-        pass
+        moves = []
+        col = pos[0]
+        row = int(pos[1]) - 1
+        knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1),
+                        (1, 2), (1, -2), (-1, 2), (-1, -2)]
+        for dcol, drow in knight_moves:
+            new_col = ord(col) + dcol
+            new_row = row + drow
+            if new_col >= ord('a') and new_col <= ord('h') and new_row >= 0 and new_row <= 7:
+                moves.append(f"{chr(new_col)}{new_row + 1}")
+        return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
-        pass
+        moves = self._get_moves(pos)
+        result = []
+        for move in moves:
+            figure = board.get_figure(move)
+            if figure is None:
+                result.append(move)
+        return result
 
 
 class Bishop(Figure):
@@ -110,67 +111,23 @@ class Queen(Figure):
         return "♕" if self.color == "white" else "♛"
 
     def _get_moves(self, pos: str) -> list:
-        result_moves = []
+        moves = []
         col = pos[0]
         row = int(pos[1]) - 1
-        # +1 +1
-        for i in range(8):
-            new_col = ord(col) + i
-            new_row = row + i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-        # -1 -1
-        for i in range(8):
-            new_col = ord(col) - i
-            new_row = row - i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-        # +1 -1
-        for i in range(8):
-            new_col = ord(col) + i
-            new_row = row - i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-        # -1 +1
-        for i in range(8):
-            new_col = ord(col) - i
-            new_row = row + i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-        # +1 0 >
-        for i in range(8):
-            new_col = ord(col) + i
-            if new_col > ord('h') or new_col < ord('a'):
-                continue
-            result_moves.append(f"{chr(new_col)}{row + 1}")
-        # -1 0 <
-        for i in range(8):
-            new_col = ord(col) - i
-            if new_col > ord('h') or new_col < ord('a'):
-                continue
-            result_moves.append(f"{chr(new_col)}{row + 1}")
-        # 0 +1 ^
-        for i in range(8):
-            new_row = row + i
-            if new_row > 7 or new_row < 0:
-                continue
-            result_moves.append(f"{col}{new_row + 1}")
-        # 0 -1 ⌄
-        for i in range(8):
-            new_row = row - i
-            if new_row > 7 or new_row < 0:
-                continue
-            result_moves.append(f"{col}{new_row + 1}")
-
-        return result_moves
+        directions = [
+            (1, 0), (-1, 0), (0, 1), (0, -1),
+            (1, 1), (-1, -1), (1, -1), (-1, 1)
+        ]
+        for dcol, drow in directions:
+            i = 0
+            while True:
+                new_col = ord(col) + dcol * i
+                new_row = row + drow * i
+                if new_col < ord('a') or new_col > ord('h') or new_row < 0 or new_row > 7:
+                    break
+                moves.append(f"{chr(new_col)}{new_row + 1}")
+                i += 1
+        return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
@@ -187,19 +144,20 @@ class King(Figure):
         return "♔" if self.color == "white" else "♚"
 
     def _get_moves(self, pos: str) -> list:
+        moves = []
         col = pos[0]
         row = int(pos[1]) - 1
-        result_moves = []
-        for col_i, row_i in ((0, 1), (0, -1),
-                             (1, 0), (1, 1), (1, -1),
-                             (-1, 0), (-1, +1), (-1, -1)):
-            new_col = ord(col) + col_i
-            new_row = row + row_i
-            if new_col > ord('h') or new_col < ord('a') or new_row > 7 or new_row < 0:
+        directions = [
+            (0, 1), (0, -1), (1, 0), (1, 1),
+            (1, -1), (-1, 0), (-1, 1), (-1, -1)
+        ]
+        for dcol, drow in directions:
+            new_col = ord(col) + dcol
+            new_row = row + drow
+            if new_col < ord('a') or new_col > ord('h') or new_row < 0 or new_row > 7:
                 continue
-            result_moves.append(f"{chr(new_col)}{row + 1}")
-
-        return result_moves
+            moves.append(f"{chr(new_col)}{new_row + 1}")
+        return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
@@ -217,17 +175,22 @@ class Pawn(Figure):
 
     def _get_moves(self, pos: str) -> list:
         row = int(pos[1]) - 1
+        file = pos[0]
+        moves = []
         if self.color == "white":
-            if row == 1:
-                return [f"{pos[0]}3", f"{pos[0]}4"]
-            elif row < 7:
-                return [f"{pos[0]}{row + 2}"]
-        elif self.color == "black":
-            if row == 6:
-                return [f"{pos[0]}6", f"{pos[0]}5"]
-            elif row > 0:
-                return [f"{pos[0]}{row + 2}"]
-        return []
+            direction = 1
+            start_row = 1
+        else:
+            direction = -1
+            start_row = 6
+        next_row = row + direction
+        if 0 <= next_row <= 7:
+            moves.append(f"{file}{next_row + 1}")
+            if row == start_row:
+                next_row2 = row + 2 * direction
+                if 0 <= next_row2 <= 7:
+                    moves.append(f"{file}{next_row2 + 1}")
+        return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
