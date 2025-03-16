@@ -50,9 +50,12 @@ class GameController:
         elif player.color != figure_start_pos.color:
             raise RuntimeError("Игрок выбрал чужую фигуру")
 
+        available_moves = figure_start_pos.get_available_moves(start_pos, self.game_field)
+        if len(available_moves) == 0:
+            raise RuntimeError("Этой пешкой нельзя ходить")
+
         print("Куда вы хотите поставить пешку?")
         end_pos = input()
-        available_moves = figure_start_pos.get_available_moves(start_pos, self.game_field)
         if end_pos not in available_moves:
             raise RuntimeError("Ход недопустим")
 
@@ -69,8 +72,8 @@ class Move:
         self.moving_figure = moving_figure
 
     def validate_move(self, game_field: GameField):
-        start = game_field.get_figure(self.start_pos)
-        end = game_field.get_figure(self.end_pos)
+        start_figure = game_field.get_figure(self.start_pos)
+        end_figure = game_field.get_figure(self.end_pos)
 
     @staticmethod
     def check_syntax(move: str):
@@ -100,3 +103,6 @@ class MoveHistory:
 if __name__ == '__main__':
     game = GameController()
     game.start_game()
+    # queen = Queen("black")
+    # field = GameField()
+    # print(queen.get_available_moves("d8", field))

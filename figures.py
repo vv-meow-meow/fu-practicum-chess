@@ -113,7 +113,7 @@ class Queen(Figure):
     def __str__(self):
         return "♕" if self.color == "white" else "♛"
 
-    def _get_moves(self, pos: str) -> list:
+    def _get_moves(self, pos: str) -> list[list[str]]:
         moves = []
         col = pos[0]
         row = int(pos[1]) - 1
@@ -122,23 +122,32 @@ class Queen(Figure):
             (1, 1), (-1, -1), (1, -1), (-1, 1)
         ]
         for dcol, drow in directions:
-            i = 0
+            moves_vector = []
+            i = 1
             while True:
                 new_col = ord(col) + dcol * i
                 new_row = row + drow * i
                 if new_col < ord('a') or new_col > ord('h') or new_row < 0 or new_row > 7:
                     break
-                moves.append(f"{chr(new_col)}{new_row + 1}")
+                moves_vector.append(f"{chr(new_col)}{new_row + 1}")
                 i += 1
+            moves.append(moves_vector)
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
         result = []
-        for pos in moves:
-            figure = board.get_figure(pos)
-            if figure is None:
-                result.append(pos)
+        for vector in moves:
+            for move in vector:
+                figure = board.get_figure(move)
+                if figure is None:
+                    result.append(move)
+                    continue
+                elif figure.color != self.color:
+                    result.append(move)
+                    break
+                else:
+                    break
         return result
 
 
@@ -224,3 +233,7 @@ class Pawn(Figure):
                     result.append(move)
 
         return result
+
+# if __name__ == '__main__':
+# moves = Queen("black").get_available_moves("d8", )
+# print(moves)
