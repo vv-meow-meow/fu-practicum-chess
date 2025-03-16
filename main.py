@@ -52,10 +52,11 @@ class GameController:
 
         print("Куда вы хотите поставить пешку?")
         end_pos = input()
-        figure_end_pos = self.game_field.get_figure(end_pos)
-        if figure_end_pos is not None:
-            raise RuntimeError("Ячейка не пустая")
+        available_moves = figure_start_pos.get_available_moves(start_pos, self.game_field)
+        if end_pos not in available_moves:
+            raise RuntimeError("Ход недопустим")
 
+        # end_pos_figure = self.game_field.get_figure(end_pos)
         self.game_field.remove_figure(start_pos)
         self.game_field.set_figure(end_pos, figure_start_pos)
         self.move_history.append(Move(start_pos, end_pos, figure_start_pos))
