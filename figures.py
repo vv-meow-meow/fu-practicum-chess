@@ -165,10 +165,12 @@ class King(Figure):
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
         result = []
-        for pos in moves:
-            figure = board.get_figure(pos)
+        for move in moves:
+            figure = board.get_figure(move)
             if figure is None:
-                result.append(pos)
+                result.append(move)
+            elif figure.color != self.color:
+                result.append(move)
         return result
 
 
