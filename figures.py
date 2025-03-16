@@ -80,46 +80,20 @@ class Bishop(Figure):
         return "♗" if self.color == "white" else "♝"
 
     def _get_moves(self, pos: str) -> list:
-        result_moves = []
+        moves = []
         col = pos[0]
         row = int(pos[1]) - 1
-        # +1 +1
-        for i in range(8):
-            new_col = ord(col) + i
-            new_row = row + i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-
-        # -1 -1
-        for i in range(8):
-            new_col = ord(col) - i
-            new_row = row - i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-
-        # +1 -1
-        for i in range(8):
-            new_col = ord(col) + i
-            new_row = row - i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-
-        # -1 +1
-        for i in range(8):
-            new_col = ord(col) - i
-            new_row = row + i
-            if (new_col > ord("h") or new_col < ord("a")
-                    or new_row > 7 or new_row < 0):
-                continue
-            result_moves.append(f"{chr(new_col)}{new_row + 1}")
-
-        return result_moves
+        directions = [(1, 1), (-1, -1), (1, -1), (-1, 1)]
+        for dcol, drow in directions:
+            i = 0
+            while True:
+                new_col = ord(col) + dcol * i
+                new_row = row + drow * i
+                if new_col < ord('a') or new_col > ord('h') or new_row < 0 or new_row > 7:
+                    break
+                moves.append(f"{chr(new_col)}{new_row + 1}")
+                i += 1
+        return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
         moves = self._get_moves(pos)
