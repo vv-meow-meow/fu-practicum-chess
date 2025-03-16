@@ -68,6 +68,13 @@ class Knight(Figure):
     def __str__(self):
         return "♘" if self.color == "white" else "♞"
 
+    def _get_moves(self, pos: str) -> list:
+        pass
+
+    def get_available_moves(self, pos: str, board: GameField) -> list:
+        pass
+
+
 class Bishop(Figure):
     def __str__(self):
         return "♗" if self.color == "white" else "♝"
