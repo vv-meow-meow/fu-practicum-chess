@@ -62,7 +62,7 @@ class Knight(Figure):
         for dcol, drow in knight_moves:
             new_col = ord(col) + dcol
             new_row = row + drow
-            if new_col >= ord('a') and new_col <= ord('h') and new_row >= 0 and new_row <= 7:
+            if ord('a') <= new_col <= ord('h') and 0 <= new_row <= 7:
                 moves.append(f"{chr(new_col)}{new_row + 1}")
         return moves
 
