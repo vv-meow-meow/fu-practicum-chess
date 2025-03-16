@@ -74,7 +74,7 @@ class Knight(Figure):
         result = []
         for move in moves:
             figure = board.get_figure(move)
-            if figure is None:
+            if figure is None or figure.color != self.color:
                 result.append(move)
         return result
 
