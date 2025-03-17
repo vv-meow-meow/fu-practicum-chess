@@ -105,7 +105,7 @@ class GameController:
 
         return result, start_pos
 
-    def choose_end_pos(self, chosen_figure: Figure, start_pos: str):
+    def choose_end_pos(self, chosen_figure: Figure, start_pos: str) -> str:
         """Prompts the user to select an ending position for the move.
 
         This method validates the chosen ending position against the available moves for the figure.
