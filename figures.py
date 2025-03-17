@@ -9,26 +9,59 @@ if TYPE_CHECKING:
 
 class Figure(ABC):
     def __init__(self, color: Literal["black", "white"]):
+        """Initialize a Figure with a specified color.
+
+        Args:
+            color (Literal["black", "white"]): The color of the figure.
+        """
         self.color: Literal["black", "white"] = color
 
     @abstractmethod
     def _get_moves(self, pos: str) -> list:
+        """Return a list of basic moves for a figure from a given position.
+
+        This method should not be used directly. Use get_available_moves for move validation.
+
+        Args:
+            pos (str): The current position in algebraic notation (e.g., 'a1').
+
+        Returns:
+            list: A list (or nested list for sliding pieces) of potential moves.
+        """
         pass
 
     @abstractmethod
     def get_available_moves(self, pos: str, board: GameField) -> list:
-        """Abstract method to get available moves for a figure
+        """Return a list of available moves for a figure from a given position.
 
-        It also checks if it can beat another figure
+        The method calculates legal moves based on basic moves and checks for possible captures.
+
+        Args:
+            pos (str): The current position in algebraic notation (e.g., 'a1').
+            board (GameField): The game board containing the positions of all figures.
+
+        Returns:
+            list: A list of legal moves for the figure.
         """
         pass
 
 
 class Rook(Figure):
     def __str__(self):
+        """Return the Unicode symbol for the rook."""
         return "♖" if self.color == "white" else "♜"
 
     def _get_moves(self, pos: str) -> list[list[str]]:
+        """Calculate potential moves for the rook in each cardinal direction.
+
+        Iterates in each direction until the edge of the board is reached.
+
+        Args:
+            pos (str): The starting position of the rook in algebraic notation (e.g., 'a1').
+
+        Returns:
+            list[list[str]]: A list of lists, where each sublist contains moves in one direction.
+        """
         moves = []
         col = pos[0]
         row = int(pos[1]) - 1
@@ -47,6 +80,15 @@ class Rook(Figure):
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Determine legal moves for the rook by checking for obstructions and potential captures.
+
+        Args:
+            pos (str): The starting position of the rook in algebraic notation.
+            board (GameField): The game board used to validate moves.
+
+        Returns:
+            list: A list of legal moves available to the rook.
+        """
         moves = self._get_moves(pos)
         result = []
         for vector in moves:
@@ -65,9 +107,20 @@ class Rook(Figure):
 
 class Knight(Figure):
     def __str__(self):
+        """Return the Unicode symbol for the knight."""
         return "♘" if self.color == "white" else "♞"
 
     def _get_moves(self, pos: str) -> list:
+        """Compute all potential moves for the knight from a given position.
+
+        The knight moves in an L-shape pattern.
+
+        Args:
+            pos (str): The starting position of the knight in algebraic notation.
+
+        Returns:
+            list: A list of potential positions the knight can move to.
+        """
         moves = []
         col = pos[0]
         row = int(pos[1]) - 1
@@ -81,6 +134,17 @@ class Knight(Figure):
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Return legal moves for the knight considering board constraints.
+
+        Checks moves for validity and ensures that moves do not capture pieces of the same color.
+
+        Args:
+            pos (str): The starting position of the knight in algebraic notation.
+            board (GameField): The game board to evaluate move legality.
+
+        Returns:
+            list: A list of legal moves available to the knight.
+        """
         moves = self._get_moves(pos)
         result = []
         for move in moves:
@@ -92,9 +156,20 @@ class Knight(Figure):
 
 class Bishop(Figure):
     def __str__(self):
+        """Return the Unicode symbol for the bishop."""
         return "♗" if self.color == "white" else "♝"
 
     def _get_moves(self, pos: str) -> list[list[str]]:
+        """Compute diagonal moves for the bishop from a given position.
+
+        Iterates diagonally until the edge of the board is reached.
+
+        Args:
+            pos (str): The bishop's starting position in algebraic notation.
+
+        Returns:
+            list[list[str]]: A list of lists, each containing potential diagonal moves.
+        """
         moves = []
         col = pos[0]
         row = int(pos[1]) - 1
@@ -113,6 +188,15 @@ class Bishop(Figure):
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Determine legal diagonal moves for the bishop by filtering based on obstructions and captures.
+
+        Args:
+            pos (str): The bishop's starting position in algebraic notation.
+            board (GameField): The game board to validate moves.
+
+        Returns:
+            list: A list of legal moves available to the bishop.
+        """
         moves = self._get_moves(pos)
         result = []
         for vector in moves:
@@ -131,9 +215,20 @@ class Bishop(Figure):
 
 class Queen(Figure):
     def __str__(self):
+        """Return the Unicode symbol for the queen."""
         return "♕" if self.color == "white" else "♛"
 
     def _get_moves(self, pos: str) -> list[list[str]]:
+        """Compute all potential moves for the queen from a given position.
+
+        Combines the moves of the rook and bishop.
+
+        Args:
+            pos (str): The queen's starting position in algebraic notation.
+
+        Returns:
+            list[list[str]]: A list of lists, each containing potential moves.
+        """
         moves = []
         col = pos[0]
         row = int(pos[1]) - 1
@@ -155,6 +250,15 @@ class Queen(Figure):
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Determine legal moves for the queen by filtering moves based on board obstructions and captures.
+
+        Args:
+            pos (str): The queen's starting position in algebraic notation.
+            board (GameField): The game board to validate moves.
+
+        Returns:
+            list: A list of legal moves available to the queen.
+        """
         moves = self._get_moves(pos)
         result = []
         for vector in moves:
@@ -173,9 +277,20 @@ class Queen(Figure):
 
 class King(Figure):
     def __str__(self):
+        """Return the Unicode symbol for the king."""
         return "♔" if self.color == "white" else "♚"
 
     def _get_moves(self, pos: str) -> list:
+        """Compute potential moves for the king from a given position.
+
+        The king can move one square in any direction.
+
+        Args:
+            pos (str): The king's starting position in algebraic notation.
+
+        Returns:
+            list: A list of positions the king can move to.
+        """
         moves = []
         col = pos[0]
         row = int(pos[1]) - 1
@@ -192,6 +307,15 @@ class King(Figure):
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Determine legal moves for the king by filtering out moves blocked by same-colored pieces.
+
+        Args:
+            pos (str): The king's starting position in algebraic notation.
+            board (GameField): The game board used to validate moves.
+
+        Returns:
+            list: A list of legal moves available to the king.
+        """
         moves = self._get_moves(pos)
         result = []
         for move in moves:
@@ -205,9 +329,20 @@ class King(Figure):
 
 class Pawn(Figure):
     def __str__(self):
+        """Return the Unicode symbol for the pawn."""
         return "♙" if self.color == "white" else "♟"
 
     def _get_moves(self, pos: str) -> list:
+        """Compute forward moves for the pawn from a given position.
+
+        Accounts for single-step and initial double-step moves based on the pawn's color.
+
+        Args:
+            pos (str): The pawn's starting position in algebraic notation.
+
+        Returns:
+            list: A list of potential forward moves for the pawn.
+        """
         row = int(pos[1]) - 1
         col = pos[0].lower()
         moves = []
@@ -227,6 +362,17 @@ class Pawn(Figure):
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Determine legal moves for the pawn, including diagonal captures.
+
+        Evaluates forward moves and adds diagonal moves if an opponent's piece is present.
+
+        Args:
+            pos (str): The pawn's starting position in algebraic notation.
+            board (GameField): The game board used to validate moves.
+
+        Returns:
+            list: A list of legal moves available to the pawn.
+        """
         moves = self._get_moves(pos)
         result = []
         for i in range(len(moves)):
