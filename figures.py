@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Literal, TYPE_CHECKING
 
-from abc import ABC
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from field import GameField
@@ -11,9 +11,11 @@ class Figure(ABC):
     def __init__(self, color: Literal["black", "white"]):
         self.color: Literal["black", "white"] = color
 
+    @abstractmethod
     def _get_moves(self, pos: str) -> list:
         pass
 
+    @abstractmethod
     def get_available_moves(self, pos: str, board: GameField) -> list:
         """Abstract method to get available moves for a figure
 
