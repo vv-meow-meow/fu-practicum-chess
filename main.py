@@ -99,6 +99,14 @@ class Move:
             return False
         return True
 
+    @staticmethod
+    def check_first_move_syntax(move: str):
+        if (len(move) != 2
+                or move[0].upper() not in "ABCDEFGH"
+                or move[1].upper() not in "12345678"):
+            return False
+        return True
+
     def determine_move(self):
         """Определяет ход – обычный, рокировка, превращение пешки в королеву и тд"""
         pass
