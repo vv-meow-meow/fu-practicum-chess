@@ -67,8 +67,6 @@ class GameController:
         return end_pos
 
     def make_move(self, player: Player):
-        # 1 часть – выбрать пешку
-        # 2 часть – куда её поставить
         chosen_figure, start_pos = self.choose_figure(player)
 
         end_pos = self.choose_end_pos(chosen_figure, start_pos)
