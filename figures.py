@@ -207,7 +207,7 @@ class Pawn(Figure):
 
     def _get_moves(self, pos: str) -> list:
         row = int(pos[1]) - 1
-        file = pos[0]
+        col = pos[0].lower()
         moves = []
         if self.color == "white":
             direction = 1
@@ -217,11 +217,11 @@ class Pawn(Figure):
             start_row = 6
         next_row = row + direction
         if 0 <= next_row <= 7:
-            moves.append(f"{file}{next_row + 1}")
+            moves.append(f"{col}{next_row + 1}")
             if row == start_row:
                 next_row2 = row + 2 * direction
                 if 0 <= next_row2 <= 7:
-                    moves.append(f"{file}{next_row2 + 1}")
+                    moves.append(f"{col}{next_row2 + 1}")
         return moves
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
@@ -232,14 +232,16 @@ class Pawn(Figure):
             move_col = move[0]
             move_row = move[1]
             if i == 0:
-                left_move = f"{chr(ord(move_col) - 1)}{move_row}"
-                right_move = f"{chr(ord(move_col) + 1)}{move_row}"
+                diag_moves = []
+                for num in (-1, 1):
+                    if "a" <= chr(ord(move_col) + num) <= "h":
+                        diag_moves.append(f"{chr(ord(move_col) + num)}{move_row}")
 
                 figure = board.get_figure(move)
                 if figure is None:
                     result.append(move)
 
-                for diag_move in (left_move, right_move):
+                for diag_move in diag_moves:
                     figure = board.get_figure(diag_move)
                     if figure is None:
                         continue
@@ -251,8 +253,3 @@ class Pawn(Figure):
                     result.append(move)
 
         return result
-
-
-if __name__ == '__main__':
-    bishop = Bishop("white")
-    print(bishop._get_moves("d4"))
