@@ -45,22 +45,22 @@ class GameController:
         result = None
         if not Move.check_first_move_syntax(start_pos):
             print("Некорректный ввод.")
-            start_pos, result = self.choose_figure(player)
+            result, start_pos = self.choose_figure(player)
 
         if result is None:
             chosen_figure = self.game_field.get_figure(start_pos)
             if chosen_figure is None:
                 print("В данной клетке нет пешки, выберите другую клетку.")
-                start_pos, result = self.choose_figure(player)
+                result, start_pos = self.choose_figure(player)
             else:
                 if chosen_figure.color != player.color:
                     print("В выбранной клетка пешка противника, выберите другую клетку.")
-                    start_pos, result = self.choose_figure(player)
+                    result, start_pos = self.choose_figure(player)
                 else:
                     available_moves = chosen_figure.get_available_moves(start_pos, self.game_field)
                     if len(available_moves) == 0:
                         print("Данная фигура не может ходить, выберите другую фигуру.")
-                        start_pos, result = self.choose_figure(player)
+                        result, start_pos = self.choose_figure(player)
                     else:
                         result = chosen_figure
 
