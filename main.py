@@ -66,16 +66,21 @@ class GameController:
 
         return result, start_pos
 
+    def choose_end_pos(self, chosen_figure: Figure, start_pos: str):
+        print("Куда вы хотите поставить пешку?")
+        end_pos = input().lower()
+        available_moves = chosen_figure.get_available_moves(start_pos, self.game_field)
+        if end_pos not in available_moves:
+            print("Сюда нельзя походить. Выберите другую клетку.")
+            end_pos = self.choose_end_pos(chosen_figure, start_pos)
+        return end_pos
+
     def make_move(self, player: Player):
         # 1 часть – выбрать пешку
         # 2 часть – куда её поставить
         chosen_figure, start_pos = self.choose_figure(player)
 
-        available_moves = chosen_figure.get_available_moves(start_pos, self.game_field)
-        print("Куда вы хотите поставить пешку?")
-        end_pos = input()
-        if end_pos not in available_moves:
-            raise RuntimeError("Ход недопустим")
+        end_pos = self.choose_end_pos(chosen_figure, start_pos)
 
         # end_pos_figure = self.game_field.get_figure(end_pos)
         self.game_field.remove_figure(start_pos)
