@@ -84,7 +84,7 @@ class GameController:
         while True:
             for player in self.players:
                 self.game_field.print_field()
-                print(f"Ход {player.color}")
+                print(f"Ход {player.color} - Кол-во ходов: {len(self.move_history)}")
                 self.make_move(player)
 
 
