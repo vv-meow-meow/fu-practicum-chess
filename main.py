@@ -29,16 +29,6 @@ class GameController:
         players.append(Player(name, color="black"))
         self.players = players
 
-    def start_game(self):
-        print("Привет! Это игра в шахматы, правила игры: Белые начинают первыми. Удачи!")
-        if self.players is None:
-            self._create_players()
-        while True:
-            for player in self.players:
-                self.game_field.print_field()
-                print(f"Ход {player.color}")
-                self.make_move(player)
-
     def choose_figure(self, player: Player) -> tuple[Figure, str]:
         print("Выберите пешку (D2)")
         start_pos = input().lower()
@@ -86,6 +76,16 @@ class GameController:
         self.game_field.remove_figure(start_pos)
         self.game_field.set_figure(end_pos, chosen_figure)
         self.move_history.append(Move(start_pos, end_pos, chosen_figure))
+
+    def start_game(self):
+        print("Привет! Это игра в шахматы, правила игры: Белые начинают первыми. Удачи!")
+        if self.players is None:
+            self._create_players()
+        while True:
+            for player in self.players:
+                self.game_field.print_field()
+                print(f"Ход {player.color}")
+                self.make_move(player)
 
 
 class Move:
