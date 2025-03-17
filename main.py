@@ -16,6 +16,7 @@ class GameController:
             self.game_field = GameField()
         self.players = players
         self.move_history = []
+        self.king_killed = False
 
     @staticmethod
     def _clear_screen():
@@ -72,8 +73,10 @@ class GameController:
 
         end_pos = self.choose_end_pos(chosen_figure, start_pos)
 
-        # end_pos_figure = self.game_field.get_figure(end_pos)
+        end_pos_figure = self.game_field.get_figure(end_pos)
         self.game_field.remove_figure(start_pos)
+        if isinstance(end_pos_figure, King):
+            self.king_killed = True
         self.game_field.set_figure(end_pos, chosen_figure)
         self.move_history.append(Move(start_pos, end_pos, chosen_figure))
 
@@ -81,11 +84,17 @@ class GameController:
         print("Привет! Это игра в шахматы, правила игры: Белые начинают первыми. Удачи!")
         if self.players is None:
             self._create_players()
-        while True:
+        winner = None
+        while not self.king_killed:
             for player in self.players:
                 self.game_field.print_field()
                 print(f"Ход {player.color} - Кол-во ходов: {len(self.move_history)}")
                 self.make_move(player)
+                if self.king_killed:
+                    winner = player
+                    break
+        print(f"Победил {winner.name}! Пешки цвета {winner.color} оказались сильнее!")
+        print(f"Всего сделано: {len(self.move_history)} ходов")
 
 
 class Move:
