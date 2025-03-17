@@ -41,28 +41,28 @@ class GameController:
 
     def choose_figure(self, player: Player) -> tuple[Figure, str]:
         print("Выберите пешку (D2)")
-        start_pos = input()
+        start_pos = input().lower()
         result = None
-        if not Move.check_syntax(start_pos):
+        if not Move.check_first_move_syntax(start_pos):
             print("Некорректный ввод.")
-            result = self.choose_figure(player)
+            start_pos, result = self.choose_figure(player)
 
         if result is None:
-            figure_start_pos = self.game_field.get_figure(start_pos)
-            if figure_start_pos is None:
+            chosen_figure = self.game_field.get_figure(start_pos)
+            if chosen_figure is None:
                 print("В данной клетке нет пешки, выберите другую клетку.")
-                result = self.choose_figure(player)
+                start_pos, result = self.choose_figure(player)
             else:
-                if figure_start_pos.color != player.color:
+                if chosen_figure.color != player.color:
                     print("В выбранной клетка пешка противника, выберите другую клетку.")
-                    result = self.choose_figure(player)
+                    start_pos, result = self.choose_figure(player)
                 else:
-                    available_moves = figure_start_pos.get_available_moves(start_pos, self.game_field)
+                    available_moves = chosen_figure.get_available_moves(start_pos, self.game_field)
                     if len(available_moves) == 0:
                         print("Данная фигура не может ходить, выберите другую фигуру.")
-                        result = self.choose_figure(player)
+                        start_pos, result = self.choose_figure(player)
                     else:
-                        result = figure_start_pos
+                        result = chosen_figure
 
         return result, start_pos
 
