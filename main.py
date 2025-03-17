@@ -39,21 +39,39 @@ class GameController:
                 print(f"Ход {player.color}")
                 self.make_move(player)
 
+    def choose_figure(self, player: Player) -> tuple[Figure, str]:
+        print("Выберите пешку (D2)")
+        start_pos = input()
+        result = None
+        if not Move.check_syntax(start_pos):
+            print("Некорректный ввод.")
+            result = self.choose_figure(player)
+
+        if result is None:
+            figure_start_pos = self.game_field.get_figure(start_pos)
+            if figure_start_pos is None:
+                print("В данной клетке нет пешки, выберите другую клетку.")
+                result = self.choose_figure(player)
+            else:
+                if figure_start_pos.color != player.color:
+                    print("В выбранной клетка пешка противника, выберите другую клетку.")
+                    result = self.choose_figure(player)
+                else:
+                    available_moves = figure_start_pos.get_available_moves(start_pos, self.game_field)
+                    if len(available_moves) == 0:
+                        print("Данная фигура не может ходить, выберите другую фигуру.")
+                        result = self.choose_figure(player)
+                    else:
+                        result = figure_start_pos
+
+        return result, start_pos
+
     def make_move(self, player: Player):
         # 1 часть – выбрать пешку
         # 2 часть – куда её поставить
-        print("Выберите пешку (D2)")
-        start_pos = input()
-        figure_start_pos = self.game_field.get_figure(start_pos)
-        if figure_start_pos is None:
-            raise RuntimeError("Неправильный выбор пешки")
-        elif player.color != figure_start_pos.color:
-            raise RuntimeError("Игрок выбрал чужую фигуру")
+        chosen_figure, start_pos = self.choose_figure(player)
 
-        available_moves = figure_start_pos.get_available_moves(start_pos, self.game_field)
-        if len(available_moves) == 0:
-            raise RuntimeError("Этой пешкой нельзя ходить")
-
+        available_moves = chosen_figure.get_available_moves(start_pos, self.game_field)
         print("Куда вы хотите поставить пешку?")
         end_pos = input()
         if end_pos not in available_moves:
@@ -61,8 +79,8 @@ class GameController:
 
         # end_pos_figure = self.game_field.get_figure(end_pos)
         self.game_field.remove_figure(start_pos)
-        self.game_field.set_figure(end_pos, figure_start_pos)
-        self.move_history.append(Move(start_pos, end_pos, figure_start_pos))
+        self.game_field.set_figure(end_pos, chosen_figure)
+        self.move_history.append(Move(start_pos, end_pos, chosen_figure))
 
 
 class Move:
@@ -70,10 +88,6 @@ class Move:
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.moving_figure = moving_figure
-
-    def validate_move(self, game_field: GameField):
-        start_figure = game_field.get_figure(self.start_pos)
-        end_figure = game_field.get_figure(self.end_pos)
 
     @staticmethod
     def check_syntax(move: str):
