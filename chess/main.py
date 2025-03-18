@@ -69,6 +69,33 @@ class GameController:
         players.append(Player(name, color="black"))
         self.players = players
 
+    def find_dangered_figures(self, player: Player) -> list[str]:
+        enemy_possible_moves = set()
+        for col in range(97, 104 + 1):
+            for row in range(1, 8 + 1):
+                move = f"{chr(col)}{row}"
+                figure = self.game_field.get_figure(move)
+                if figure is None:
+                    continue
+                else:
+                    if figure.color == player.color:
+                        continue
+                    else:
+                        available_moves = figure.get_available_moves(move, self.game_field)
+                        if len(available_moves) > 0:
+                            enemy_possible_moves.update(available_moves)
+
+        result = set()
+        for enemy_move in enemy_possible_moves:
+            targeted_figure = self.game_field.get_figure(enemy_move)
+            if targeted_figure is None:
+                continue
+            else:
+                if targeted_figure.color == player.color:
+                    result.add(enemy_move)
+
+        return list(result)
+
     def choose_figure(self, player: Player) -> tuple[Figure, str]:
         """Prompts the user to select a figure to move.
 
@@ -162,6 +189,8 @@ class GameController:
         while not self.king_killed:
             for player in self.players:
                 self.game_field.print_field()
+                print("-" * 25)
+                self.game_field.print_dangered_field(self.find_dangered_figures(player))
                 print(f"Ход {player.color} - Кол-во ходов: {len(self.move_history)}")
                 self.make_move(player)
                 if self.king_killed:
@@ -251,8 +280,8 @@ class Move:
 
 
 if __name__ == "__main__":
-    # game = GameController()
-    # game.start_game()
-    custom_game_field = GameField(AUTHOR_FIELD)
-    custom_game = GameController(custom_game_field)
-    custom_game.start_game()
+    game = GameController()
+    game.start_game()
+    # custom_game_field = GameField(AUTHOR_FIELD)
+    # custom_game = GameController(custom_game_field)
+    # custom_game.start_game()

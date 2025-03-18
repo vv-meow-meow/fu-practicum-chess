@@ -111,3 +111,19 @@ class GameField:
             print(i + 1, end=" ")
             print()
         print("  A B C D E F G H  ")
+
+    def print_dangered_field(self, dangered_positions: list[str]):
+        print("  A B C D E F G H  ")
+        for i in range(7, -1, -1):
+            print(i + 1, end=" ")
+            for pos in "abcdefgh":
+                current_pos = f"{pos}{i + 1}"
+                if current_pos in dangered_positions:
+                    print("❗", end="")
+                elif self.data[pos][i] is None:
+                    print(".", end=" ")
+                else:
+                    print(self.data[pos][i], end=" ")
+            print(i + 1, end=" ")
+            print()
+        print("  A B C D E F G H  ")

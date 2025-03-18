@@ -4,7 +4,7 @@ from typing import Literal, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from field import GameField
+    from ..field import GameField
 
 
 class Figure(ABC):

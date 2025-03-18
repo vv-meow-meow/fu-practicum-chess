@@ -103,7 +103,7 @@ class PEKKA(Figure):
         if row == 8:
             return []
 
-        return [f"{col}{row + 1}"]
+        return [f"{col}{row + 1}" if self.color == "white" else f"{col}{row - 1}"]
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
         pos = pos.lower()
@@ -116,13 +116,22 @@ class PEKKA(Figure):
             elif figure_on_move.color != self.color:
                 result.append(move)
 
-        col = pos[0]
-        row = int(pos[1])
-        capture_move = f"{col}{row + 2}"
-        figure_on_capture = board.get_figure(capture_move)
-        if figure_on_capture is not None:
-            if figure_on_capture.color != self.color:
-                result.append(capture_move)
+        pos_col = pos[0]
+        pos_row = int(pos[1])
+        if self.color == "white":
+            if 1 <= pos_row <= 6:
+                capture_move = f"{pos_col}{pos_row + 2}"
+                figure_on_capture = board.get_figure(capture_move)
+                if figure_on_capture is not None:
+                    if figure_on_capture.color != self.color:
+                        result.append(capture_move)
+        else:
+            if 3 <= pos_row <= 8:
+                capture_move = f"{pos_col}{pos_row - 2}"
+                figure_on_capture = board.get_figure(capture_move)
+                if figure_on_capture is not None:
+                    if figure_on_capture.color != self.color:
+                        result.append(capture_move)
 
         return result
 
