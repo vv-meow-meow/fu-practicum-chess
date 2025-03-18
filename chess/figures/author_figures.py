@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from field import GameField
 
-from figures import *
+from .figures import *
 
 
 class Balloon(Figure):
@@ -127,7 +127,7 @@ class PEKKA(Figure):
         return result
 
 
-CUSTOMIZED_FIELD = {
+AUTHOR_FIELD = {
     "a": [Rook("white"), Pawn("white"), None, None, None, None, Pawn("black"), Rook("black")],
     "b": [Balloon("white"), Pawn("white"), None, None, None, None, Pawn("black"), Balloon("black")],
     "c": [Bishop("white"), Pawn("white"), None, None, None, None, Pawn("black"), Bishop("black")],
