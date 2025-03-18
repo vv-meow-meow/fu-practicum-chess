@@ -1,5 +1,6 @@
 import os
 
+from author_figures import *
 from figures import *
 from field import GameField
 
@@ -41,7 +42,8 @@ class GameController:
             players (tuple[Player], optional): The tuple of players. Defaults to None.
         """
         if game_field is None:
-            self.game_field = GameField()
+            game_field = GameField()
+        self.game_field = game_field
         self.players = players
         self.move_history = []
         self.king_killed = False
@@ -248,5 +250,8 @@ class Move:
 
 
 if __name__ == "__main__":
-    game = GameController()
-    game.start_game()
+    # game = GameController()
+    # game.start_game()
+    custom_game_field = GameField(CUSTOMIZED_FIELD)
+    custom_game = GameController(custom_game_field)
+    custom_game.start_game()
