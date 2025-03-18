@@ -96,6 +96,15 @@ class GameField:
         print("  A B C D E F G H  ")
 
     def print_field_with_hints(self, figure: Figure, position: str):
+        """Prints the game board with available move hints for a given chess figure.
+
+        The board is printed with columns labeled A to H and rows numbered 1 to 8.
+        Positions that are available moves for the given figure are marked with an asterisk (*).
+
+        Args:
+            figure (Figure): The chess figure for which available moves are calculated.
+            position (str): The current position of the figure in algebraic notation (e.g., 'e2').
+        """
         available_moves = figure.get_available_moves(position, self)
         print("  A B C D E F G H  ")
         for i in range(7, -1, -1):
@@ -113,6 +122,15 @@ class GameField:
         print("  A B C D E F G H  ")
 
     def print_dangered_field(self, dangered_positions: list[str]):
+        """Prints the game board highlighting dangered positions.
+
+        The board is printed with columns labeled A to H and rows numbered 1 to 8.
+        Positions that are considered dangered are marked with a danger symbol (❗).
+
+        Args:
+            dangered_positions (list[str]):
+                A list of board positions in algebraic notation that are considered dangered.
+        """
         print("  A B C D E F G H  ")
         for i in range(7, -1, -1):
             print(i + 1, end=" ")

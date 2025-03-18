@@ -18,9 +18,9 @@ class Figure(ABC):
 
     @abstractmethod
     def _get_moves(self, pos: str) -> list:
-        """Return a list of basic moves for a figure from a given position.
+        """Get the basic potential moves for the figure from the specified position.
 
-        This method should not be used directly. Use get_available_moves for move validation.
+        This is a helper method and should not be called directly; use get_available_moves() for move validation.
 
         Args:
             pos (str): The current position in algebraic notation (e.g., 'a1').
@@ -32,9 +32,9 @@ class Figure(ABC):
 
     @abstractmethod
     def get_available_moves(self, pos: str, board: GameField) -> list:
-        """Return a list of available moves for a figure from a given position.
+        """Calculate the legal moves for the figure from the given position.
 
-        The method calculates legal moves based on basic moves and checks for possible captures.
+        This method uses the basic moves and evaluates the board state to determine possible captures.
 
         Args:
             pos (str): The current position in algebraic notation (e.g., 'a1').
@@ -47,7 +47,13 @@ class Figure(ABC):
 
 
 class King(Figure):
+    """Represents a King piece in checkers.
+
+    A king can move one square diagonally in any direction and capture opposing pieces by jumping over them.
+    """
+
     def __str__(self):
+        """Return a string representation of the king piece."""
         return "KW" if self.color == "white" else "KB"
 
     def _get_moves(self, pos: str) -> list:
@@ -66,6 +72,19 @@ class King(Figure):
         return result
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Calculate the legal moves for the king from the given position.
+
+        This method determines basic diagonal moves and then validates them against the game board.
+        If an opponent's piece is encountered,
+        it checks whether the capture move is valid by ensuring the landing square is empty.
+
+        Args:
+            pos (str): The current position in algebraic notation (e.g., 'a1').
+            board (GameField): The game board containing piece positions.
+
+        Returns:
+            list: A list of valid moves for the king, including potential capture moves.
+        """
         pos = pos.lower()
         pos_col = ord(pos[0])
         pos_row = int(pos[1])
@@ -92,7 +111,13 @@ class King(Figure):
 
 
 class Man(Figure):
+    """Represents a Man piece in checkers.
+
+    A man moves diagonally forward (up for white, down for black) and can capture opposing pieces by jumping over them.
+    """
+
     def __str__(self):
+        """Return a string representation of the man piece."""
         return "⚪" if self.color == "white" else "⚫"
 
     def _get_moves(self, pos: str) -> list:
@@ -115,6 +140,18 @@ class Man(Figure):
         return result
 
     def get_available_moves(self, pos: str, board: GameField) -> list:
+        """Calculate the legal moves for the man from the given position.
+
+        This method determines valid forward moves and checks for possible captures based on the board state.
+        If an opponent's piece is encountered, it validates the capture move by ensuring the landing square is empty.
+
+        Args:
+            pos (str): The current position in algebraic notation (e.g., 'a1').
+            board (GameField): The game board containing piece positions.
+
+        Returns:
+            list: A list of valid moves for the man, including potential capture moves.
+        """
         pos = pos.lower()
         pos_col = ord(pos[0])
         pos_row = int(pos[1])

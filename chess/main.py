@@ -70,6 +70,17 @@ class GameController:
         self.players = players
 
     def find_dangered_figures(self, player: Player) -> list[str]:
+        """Find board positions where the player's figures are under threat.
+
+        This method scans the entire board to determine all potential moves available to enemy pieces.
+        It then checks which of these moves target squares occupied by the player's figures, indicating that those pieces are in danger of being captured.
+
+        Args:
+            player (Player): The player whose figures are being assessed for threats.
+
+        Returns:
+            list[str]: A list of board positions (in algebraic notation) where the player's figures are under threat.
+        """
         enemy_possible_moves = set()
         for col in range(97, 104 + 1):
             for row in range(1, 8 + 1):
