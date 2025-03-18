@@ -139,7 +139,7 @@ class GameController:
             player (Player): The player making the move.
         """
         chosen_figure, start_pos = self.choose_figure(player)
-
+        self.game_field.print_field_with_hints(chosen_figure, start_pos)
         end_pos = self.choose_end_pos(chosen_figure, start_pos)
 
         end_pos_figure = self.game_field.get_figure(end_pos)

@@ -94,3 +94,20 @@ class GameField:
             print(i + 1, end=" ")
             print()
         print("  A B C D E F G H  ")
+
+    def print_field_with_hints(self, figure: Figure, position: str):
+        available_moves = figure.get_available_moves(position, self)
+        print("  A B C D E F G H  ")
+        for i in range(7, -1, -1):
+            print(i + 1, end=" ")
+            for pos in "abcdefgh":
+                current_pos = f"{pos}{i + 1}"
+                if current_pos in available_moves:
+                    print("*", end=" ")
+                elif self.data[pos][i] is None:
+                    print(".", end=" ")
+                else:
+                    print(self.data[pos][i], end=" ")
+            print(i + 1, end=" ")
+            print()
+        print("  A B C D E F G H  ")
